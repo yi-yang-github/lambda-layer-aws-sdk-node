@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  build-lambda:
+    build: .
+    # Mount /opt folder
+    volumes:
+      - $PWD/opt:/opt
+    environment:
+      - NODE_ENV=production
+    command: ls -lah /opt

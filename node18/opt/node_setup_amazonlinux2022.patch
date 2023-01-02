@@ -1,0 +1,50 @@
+--- node.js.orig	2023-01-02 09:25:58
++++ node.js	2023-01-02 09:30:00
+@@ -182,8 +182,8 @@
+ #-check-distro-#
+ 
+ ## Check distro and arch
+-echo "+ rpm -q --whatprovides redhat-release || rpm -q --whatprovides centos-release || rpm -q --whatprovides cloudlinux-release || rpm -q --whatprovides sl-release || rpm -q --whatprovides fedora-release"
+-DISTRO_PKG=$(rpm -q --whatprovides redhat-release || rpm -q --whatprovides centos-release || rpm -q --whatprovides cloudlinux-release || rpm -q --whatprovides sl-release || rpm -q --whatprovides fedora-release)
++echo "+ rpm -q --whatprovides redhat-release || rpm -q --whatprovides centos-release || rpm -q --whatprovides cloudlinux-release || rpm -q --whatprovides sl-release || rpm -q --whatprovides fedora-release || rpm -q --whatprovides system-release"
++DISTRO_PKG=$(rpm -qa | egrep '(centos|cloudlinux|sl|fedora|system)-release')
+ echo "+ uname -m"
+ UNAME_ARCH=$(uname -m)
+ 
+@@ -206,6 +206,7 @@
+ 
+ fi
+ 
++
+ if [[ $DISTRO_PKG =~ ^(redhat|centos|almalinux|rocky|cloudlinux|mageia|sl)- ]]; then
+     DIST_TYPE=el
+ elif [[ $DISTRO_PKG =~ ^(enterprise|system)-release- ]]; then # Oracle Linux & Amazon Linux
+@@ -227,11 +228,15 @@
+ 
+ fi
+ 
+-if [[ $DISTRO_PKG =~ ^system-release ]]; then
+ 
+-  # Amazon Linux, for 2014.* use el7, older versions are unknown, perhaps el6
+-  DIST_VERSION=7
+-
++if [[ $DISTRO_PKG =~ ^system-release ]]; then
++  # Amazon Linux 2022
++  if uname -r | grep -F .amzn2022.; then
++    DIST_VERSION=8
++  else
++    # Amazon Linux, for 2014.* use el7, older versions are unknown, perhaps el6
++    DIST_VERSION=7
++  fi
+ else
+ 
+   ## Using the redhat-release-server-X, centos-release-X, centos-stream-release-X, etc. pattern
+@@ -347,7 +352,7 @@
+ print_status "Installing release setup RPM..."
+ 
+ ## --nosignature because nodesource-release contains the signature!
+-exec_cmd "rpm -i --nosignature --force '${RPM_TMP}'"
++exec_cmd "rpm -i --nodeps --nosignature --force '${RPM_TMP}'"
+ 
+ print_status "Cleaning up..."
+ 
