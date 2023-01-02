@@ -8,4 +8,4 @@ services:
       - $PWD/opt:/opt
     environment:
       - NODE_ENV=production
-    command: ls -lah /opt
+    command: cp -a /tmp/layer.zip opt/layer.zip

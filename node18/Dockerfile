@@ -24,8 +24,7 @@ RUN mkdir -p /tmp/layer \
  && cd /tmp/layer \
  && npm install aws-sdk \
  && cd node_modules \
- && zip -r /tmp/layer.zip * \
- && mkdir -p /opt \
- && mv /tmp/layer.zip /opt
+ && zip -r /tmp/layer.zip * 
 
+VOLUME [ "/opt" ]
 

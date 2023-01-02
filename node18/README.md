@@ -1,3 +1,26 @@
+# Usage
+(Assume your working dir is  this `node18` folder, if not
+```
+cd node18
+```
+
+## Build:
+```
+docker-compose build
+```
+This will build / rebuild the `layer.zip` inside docker container at `/tmp/layer.zip`.
+
+## Copy
+```
+docker-compose up
+```
+This will copy the `layer.zip` from inside docker container to local `opt/layer.zip`.
+
+## Use
+The repo is public so you can directly use this zip file from the github public URL.
+E.g. use that in TerraForm.
+
+# How it's built
 As of Jan 1, 2023:
 
 This is actually harder than I thought.
